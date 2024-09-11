@@ -1,0 +1,96 @@
+/* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fef4f9; /* Fundo rosa claro */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.caixa-principal {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(236, 78, 78, 0.1);
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh; /* Limita a altura máxima para rolagem */
+    overflow-y: auto; /* Adiciona rolagem vertical quando necessário */
+}
+
+h1 {
+    text-align: center;
+    color: #f8bd3e; /* Rosa choque */
+    margin-bottom: 20px;
+    font-size: 2em;
+}
+
+.caixa-perguntas {
+    margin-bottom: 20px;
+}
+
+.pergunta {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    background: #fff4e4; /* Rosa claro */
+}
+
+.pergunta p {
+    margin: 0;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.alternativa {
+    display: block;
+    background: #ffbe69; /* Rosa choque */
+    color: #fff;
+    border: none;
+    padding: 12px;
+    margin-top: 5px;
+    cursor: pointer;
+    border-radius: 6px;
+    text-align: left;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.alternativa.selecionada {
+    background: #ffecac; /* Rosa escuro */
+}
+
+.alternativa:hover {
+    background: #fadc79; /* Rosa escuro */
+    transform: scale(1.02); /* Leve aumento ao passar o mouse */
+}
+
+#calcular-resultado {
+    background: #ffcb5c; /* Rosa choque */
+    color: #fff;
+    border: none;
+    padding: 12px;
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 1.2em;
+    width: 100%;
+    transition: background 0.3s, transform 0.2s;
+}
+
+#calcular-resultado:hover {
+    background: hsl(39, 98%, 64%); /* Rosa escuro */
+    transform: scale(1.02); /* Leve aumento ao passar o mouse */
+}
+
+.caixa-resultado {
+    margin-top: 20px;
+}
+
+.texto-resultado {
+    font-size: 1.2em;
+    text-align: center;
+    color: #333;
+}
