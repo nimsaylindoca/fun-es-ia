@@ -1,5 +1,3 @@
-// script.js
-
 document.addEventListener('DOMContentLoaded', () => {
     const perguntas = [
         {
@@ -60,9 +58,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const calcularResultadoBtn = document.getElementById('calcular-resultado');
 
     let respostas = {};
+    let perguntaAtual = 0;
 
-    // Cria as perguntas e alternativas
-    perguntas.forEach(pergunta => {
+    const personagens = {
+        Lenny: 0,
+        Eric: 0,
+        Kurt: 0,
+        Rob: 0,
+        Marcus: 0
+    };
+
+    const exibirPergunta = () => {
+        const pergunta = perguntas[perguntaAtual];
+        caixaPerguntas.innerHTML = ''; // Limpa perguntas anteriores
+
         const perguntaDiv = document.createElement('div');
         perguntaDiv.classList.add('pergunta');
         perguntaDiv.dataset.id = pergunta.id;
@@ -75,53 +84,70 @@ document.addEventListener('DOMContentLoaded', () => {
             const botaoAlternativa = document.createElement('button');
             botaoAlternativa.classList.add('alternativa');
             botaoAlternativa.textContent = alternativa;
-            botaoAlternativa.dataset.resposta = String.fromCharCode(65 + index); // A, B, C, ...
-            botaoAlternativa.addEventListener('click', (event) => {
-                const perguntaId = event.target.closest('.pergunta').dataset.id;
-                const resposta = event.target.dataset.resposta;
+            botaoAlternativa.dataset.resposta = index; // Usando índice para pontuação
+            botaoAlternativa.addEventListener('click', () => {
+                // Atualiza a contagem de personagens baseados na resposta
+                const respostaIndex = parseInt(botaoAlternativa.dataset.resposta);
+                switch (respostaIndex) {
+                    case 0: personagens.Lenny++; break; // Exemplo de mapeamento
+                    case 1: personagens.Eric++; break;
+                    case 2: personagens.Kurt++; break;
+                    case 3: personagens.Rob++; break;
+                    case 4: personagens.Marcus++; break;
+                    case 5: personagens.Marcus++; break; // Mesmo personagem em mais de uma resposta
+                }
 
-                // Atualiza as respostas
-                respostas[perguntaId] = resposta;
+                respostas[pergunta.id] = respostaIndex;
 
-                // Marca a opção selecionada
-                document.querySelectorAll(`.pergunta[data-id="${perguntaId}"] .alternativa`).forEach(btn => {
-                    btn.classList.remove('selecionada');
-                });
-                event.target.classList.add('selecionada');
+                // Avança para a próxima pergunta
+                perguntaAtual++;
+                if (perguntaAtual < perguntas.length) {
+                    exibirPergunta();
+                } else {
+                    mostrarResultado(); // Chama a função que mostra o resultado
+                }
             });
             perguntaDiv.appendChild(botaoAlternativa);
         });
 
         caixaPerguntas.appendChild(perguntaDiv);
-    });
+    };
 
-    calcularResultadoBtn.addEventListener('click', () => {
-        const totalPerguntas = perguntas.length;
-        const respostasCorretas = Object.keys(respostas).length;
-        const porcentagem = (respostasCorretas / totalPerguntas) * 100;
+    const mostrarResultado = () => {
+        // Encontra o personagem com mais pontos
+        const resultadoPersonagem = Object.keys(personagens).reduce((a, b) => personagens[a] > personagens[b] ? a : b);
 
-        let resultado;
-        let imagem;
+        let resultado = '';
+        let imagem = '';
 
-        if (porcentagem >= 80) {
-            resultado = 'Você é como Lenny Feder: um líder natural e sempre pronto para diversão!';
-            imagem = 'https://example.com/imagem_lenny.jpg'; //  <img>
-        } else if (porcentagem >= 60) {
-            resultado = 'Você tem um espírito divertido como Eric Lamonsoff!';
-            imagem = 'https://example.com/imagem_eric.jpg'; // Substitua pela URL da imagem de Eric Lamonsoff
-        } else if (porcentagem >= 40) {
-            resultado = 'Você é tão carismático quanto Kurt McKenzie!';
-            imagem = 'https://example.com/imagem_kurt.jpg'; // Substitua pela URL da imagem de Kurt McKenzie
-        } else if (porcentagem >= 20) {
-            resultado = 'Você tem o coração de Rob Hilliard!';
-            imagem = 'https://example.com/imagem_rob.jpg'; // Substitua pela URL da imagem de Rob Hilliard
-        } else {
-            resultado = 'Você é tão esperto e inteligente quanto Marcus!';
-            imagem = 'https://example.com/imagem_marcus.jpg'; // Substitua pela URL da imagem de Marcus
+        switch (resultadoPersonagem) {
+            case 'Lenny':
+                resultado = 'Você é como Lenny Feder: um líder natural e sempre pronto para diversão!';
+                imagem = 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.sinemalar.com%2Fkarakter-galeri%2F4379%2Flenny-feder%2F2&psig=AOvVaw0VHQvI0IZ99i3uEc4AttTD&ust=1727972773404000&source=images&cd=vfe&opi=89978449&ved=0CBAQjRxqFwoTCOjZkK6O8IgDFQAAAAAdAAAAABAE';
+                break;
+            case 'Eric':
+                resultado = 'Você tem um espírito divertido como Eric Lamonsoff!';
+                imagem = 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DXsGoFD3GVKI&psig=AOvVaw07-QKAFKHdegg4jhUFnwuO&ust=1727973009975000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCIDVtp6P8IgDFQAAAAAdAAAAABAf';
+                break;
+            case 'Kurt':
+                resultado = 'Você é tão carismático quanto Kurt McKenzie!';
+                imagem = 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fdublagem.fandom.com%2Fwiki%2FGente_Grande&psig=AOvVaw18354rkfTfclKAdv_Tstiz&ust=1727973061601000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCODx17aP8IgDFQAAAAAdAAAAABAx';
+                break;
+            case 'Rob':
+                resultado = 'Você tem o coração de Rob Hilliard!';
+                imagem = 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fhero.fandom.com%2Fwiki%2FRob_Hilliard&psig=AOvVaw3Pvpzm1L86VJsJQ8kU7o8Y&ust=1727973169549000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKDmp-qP8IgDFQAAAAAdAAAAABAS';
+                break;
+            case 'Marcus':
+                resultado = 'Você é tão esperto e inteligente quanto Marcus!';
+                imagem = 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fgrownups.fandom.com%2Fwiki%2FMarcus_Higgins&psig=AOvVaw0RXa20DjDh3qNTsr6lmHqI&ust=1727973220659000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCLiI0oGQ8IgDFQAAAAAdAAAAABAT';
+                break
         }
 
-        resultadoTexto.textContent = `Sua pontuação é ${porcentagem.toFixed(0)}%. ${resultado}`;
+        resultadoTexto.textContent = resultado;
         imagemPersonagem.src = imagem;
         imagemPersonagem.style.display = 'block';
-    });
+    };
+
+    // Começa exibindo a primeira pergunta
+    exibirPergunta();
 });
